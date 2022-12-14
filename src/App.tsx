@@ -1,7 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Button } from 'kc_components/react/ui/Button';
 import './App.css';
-import { Button } from 'kc_components/ui/Button';
+import logo from './logo.svg';
 
 function App() {
   return (

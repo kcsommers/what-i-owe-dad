@@ -1,9 +1,23 @@
+import { BaseTheme } from 'kc_components/react/theme';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
+import './index.css';
+import { LoginPage } from './pages/login/Login';
 import reportWebVitals from './reportWebVitals';
-import { BaseTheme } from 'kc_components/theme';
+import 'kc_components/common/global-styles';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />
+  },
+  {
+    path: '/login',
+    element: <LoginPage />
+  }
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +25,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BaseTheme>
-      <App />
+      <RouterProvider router={router} />
     </BaseTheme>
   </React.StrictMode>
 );

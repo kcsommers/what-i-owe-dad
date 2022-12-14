@@ -3,8 +3,7 @@ const { dependencies } = require('./package.json');
 module.exports = {
   name: 'host',
   remotes: {
-    kc_components:
-      'kc_components@http://localhost:4000/kc-components-remoteEntry.js'
+    kc_components: 'kc_components@http://localhost:4000/remoteEntry.js'
   },
   shared: {
     ...dependencies,
