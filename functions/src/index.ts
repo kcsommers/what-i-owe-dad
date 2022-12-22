@@ -1,25 +1,4 @@
-import * as functions from 'firebase-functions';
-
-// The Firebase Admin SDK to access Firestore.
-import * as admin from 'firebase-admin';
-admin.initializeApp();
-
-// .schedule('0 0 1 * *')
-export const scheduledPayment = functions.pubsub
-  .schedule('* * * * *')
-  .onRun((context) => {
-    functions.logger.info('scheduled function context:::: ', context);
-  });
-
-export const addPayment = functions.https.onRequest(async (req, res) => {
-  const paymentJSON = req.query.paymentJSON as string;
-  const writeResult = await admin
-    .firestore()
-    .collection('payments')
-    .add(JSON.parse(paymentJSON));
-  // Send back a message that we've successfully written the message
-  res.json({ result: `Payment with ID: ${writeResult.id} added.` });
-});
+export * from './payments/scheduled-payment';
 
 // // Listens for new messages added to /messages/:documentId/original and creates an
 // // uppercase version of the message to /messages/:documentId/uppercase
