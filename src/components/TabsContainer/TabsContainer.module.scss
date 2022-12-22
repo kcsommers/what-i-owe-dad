@@ -1,0 +1,12 @@
+button.tab_btn {
+  display: inline-block;
+  width: 150px;
+  opacity: 0.45;
+  box-shadow: inset 0 -15px 15px -15px rgba(0, 0, 0, 0.45);
+
+  &.active_tab {
+    background-color: #e9ebef;
+    opacity: 1;
+    box-shadow: none;
+  }
+}

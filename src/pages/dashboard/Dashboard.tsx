@@ -104,25 +104,27 @@ export const DashboardPage = () => {
                 ]}
               />
             </TabContent>,
-            <Table<ITransaction>
-              data={loans}
-              columns={[
-                {
-                  display: 'Date',
-                  property: 'date',
-                  transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
-                },
-                {
-                  display: 'Amount',
-                  property: 'amount',
-                  transformer: (row) => getDollarString(row.amount)
-                },
-                {
-                  display: 'Description',
-                  property: 'description'
-                }
-              ]}
-            />
+            <TabContent>
+              <Table<ITransaction>
+                data={loans}
+                columns={[
+                  {
+                    display: 'Date',
+                    property: 'date',
+                    transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+                  },
+                  {
+                    display: 'Amount',
+                    property: 'amount',
+                    transformer: (row) => getDollarString(row.amount)
+                  },
+                  {
+                    display: 'Description',
+                    property: 'description'
+                  }
+                ]}
+              />
+            </TabContent>
           ]}
         />
       </section>
