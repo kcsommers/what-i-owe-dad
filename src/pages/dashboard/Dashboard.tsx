@@ -1,15 +1,26 @@
 import { animated } from '@react-spring/web';
+import { getDateDisplay } from 'kc_components/common/utils/dates/date-utils';
 import { getDollarString } from 'kc_components/common/utils/display/get-dollar-string';
 import { ImageCrossfader } from 'kc_components/react/ui/ImageCrossfader';
 import { Layout } from 'kc_components/react/ui/Layout';
 import { useEffect, useState } from 'react';
+import { Table } from '../../components/Table';
+import { TabContent, TabsContainer } from '../../components/TabsContainer';
 import { useFirebase } from '../../firebase';
 import { getLoansCollection } from '../../transactions/loans/loans-api';
 import { getPaymentsCollection } from '../../transactions/payments/payments-api';
 
+interface ITransaction {
+  amount: number;
+  date: number;
+  description: string;
+}
+
 export const DashboardPage = () => {
   const { firestore } = useFirebase();
-  const [totalOwed, setTotalOwed] = useState(0);
+  const [totalOwed, setTotalOwed] = useState<number>();
+  const [loans, setLoans] = useState<ITransaction[]>();
+  const [payments, setPayments] = useState<ITransaction[]>();
 
   useEffect(() => {
     (async () => {
@@ -17,22 +28,27 @@ export const DashboardPage = () => {
         getLoansCollection(firestore),
         getPaymentsCollection(firestore)
       ]);
-      const totalLoans =
-        loansCollection.docs.reduce((tot, doc) => {
-          const data = doc.data();
-          tot += data.amount;
-          return tot;
-        }, 0) || 0;
-      const totalPayments =
-        paymentsCollection.docs.reduce((tot, doc) => {
-          const data = doc.data();
-          tot += data.amount;
-          return tot;
-        }, 0) || 0;
-
-      setTotalOwed(totalLoans - totalPayments);
+      setLoans(loansCollection.docs.map((d) => d.data() as ITransaction));
+      setPayments(paymentsCollection.docs.map((d) => d.data() as ITransaction));
     })();
   }, []);
+
+  useEffect(() => {
+    if (!loans || !payments) {
+      return;
+    }
+    const totalLoans =
+      loans.reduce((tot, data) => {
+        tot += data.amount;
+        return tot;
+      }, 0) || 0;
+    const totalPayments =
+      payments.reduce((tot, data) => {
+        tot += data.amount;
+        return tot;
+      }, 0) || 0;
+    setTotalOwed(totalLoans - totalPayments);
+  }, [loans, payments]);
 
   return (
     <Layout>
@@ -63,6 +79,53 @@ export const DashboardPage = () => {
           </h1>
         </div>
       </div>
+      <section className='p-4'>
+        <TabsContainer
+          tabNames={['Payments', 'Loans']}
+          tabContent={[
+            <TabContent>
+              <Table<ITransaction>
+                data={payments}
+                columns={[
+                  {
+                    display: 'Date',
+                    property: 'date',
+                    transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+                  },
+                  {
+                    display: 'Amount',
+                    property: 'amount',
+                    transformer: (row) => getDollarString(row.amount)
+                  },
+                  {
+                    display: 'Description',
+                    property: 'description'
+                  }
+                ]}
+              />
+            </TabContent>,
+            <Table<ITransaction>
+              data={loans}
+              columns={[
+                {
+                  display: 'Date',
+                  property: 'date',
+                  transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+                },
+                {
+                  display: 'Amount',
+                  property: 'amount',
+                  transformer: (row) => getDollarString(row.amount)
+                },
+                {
+                  display: 'Description',
+                  property: 'description'
+                }
+              ]}
+            />
+          ]}
+        />
+      </section>
     </Layout>
   );
 };
