@@ -1,0 +1,26 @@
+h1.title {
+  font-size: 50px;
+  text-align: center;
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  // background-color: rgba(#fff, 0.75);
+  color: #fff;
+  padding: 0.5rem 4rem;
+  border-radius: 2px;
+  white-space: nowrap;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+h2.total_owed {
+  font-size: max(15vw, 100px);
+  color: #fff;
+}
+
+section.tabs_section {
+  padding: 2rem 0.5rem;
+  @media (min-width: 600px) {
+    padding: 4rem;
+  }
+}

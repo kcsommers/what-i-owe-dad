@@ -1,5 +1,13 @@
-import { collection, Firestore, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  Firestore,
+  getDocs,
+  orderBy,
+  query
+} from 'firebase/firestore';
 
 export const getLoansCollection = async (db: Firestore) => {
-  return await getDocs(collection(db, 'loans'));
+  const loansRef = collection(db, 'loans');
+  const q = query(loansRef, orderBy('date', 'desc'));
+  return await getDocs(q);
 };

@@ -118,14 +118,14 @@ export const Table = <T,>({
 
   if (!data) {
     return (
-      <div className='empty_table_wrap'>
+      <div className={styles.empty_table_wrap}>
         <LoadingSpinner />
       </div>
     );
   }
   if (!data.length) {
     return (
-      <div className='empty_table_wrap'>
+      <div className={styles.empty_table_wrap}>
         {emptyMessage || 'No data to display'}
       </div>
     );

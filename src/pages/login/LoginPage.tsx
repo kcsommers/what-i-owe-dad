@@ -1,9 +1,8 @@
-import { Form } from 'kc_components/react/ui/Form';
 import { emailRegex } from 'kc_components/common/utils/regex';
-import { Layout } from 'kc_components/react/ui/Layout';
-import { useAuth } from '../../context/auth.context';
+import { Form } from 'kc_components/react/ui/Form';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useAuth } from '../../context/auth.context';
 import styles from './LoginPage.module.scss';
 
 export const LoginPage = () => {
@@ -26,14 +25,8 @@ export const LoginPage = () => {
   };
 
   return (
-    <div
-      className='flex-centered-content'
-      style={{ height: '100vh', padding: '0 40px' }}
-    >
-      <div
-        className={styles.page_inner}
-        style={{ width: '50%', minWidth: '350px' }}
-      >
+    <div className='flex-centered-content' style={{ height: '100vh' }}>
+      <div style={{ width: '50%', minWidth: '350px' }}>
         <Form
           inputs={[
             {
