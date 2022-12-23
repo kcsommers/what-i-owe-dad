@@ -25,7 +25,8 @@
     "start": "node ./scripts/start.js",
     "build": "node ./scripts/build.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:start": "npm run build && cd build && PORT=3000 npx serve"
   },
   "eslintConfig": {
     "extends": [
