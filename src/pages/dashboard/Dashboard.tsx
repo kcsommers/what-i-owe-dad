@@ -1,14 +1,18 @@
 import { animated } from '@react-spring/web';
+import classNames from 'classnames';
 import { getDateDisplay } from 'kc_components/common/utils/dates/date-utils';
 import { getDollarString } from 'kc_components/common/utils/display/get-dollar-string';
 import { ImageCrossfader } from 'kc_components/react/ui/ImageCrossfader';
 import { Layout } from 'kc_components/react/ui/Layout';
+import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
+import { useInterval } from 'kc_components/react/utils/hooks/use-interval';
 import { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import { TabContent, TabsContainer } from '../../components/TabsContainer';
 import { useFirebase } from '../../firebase';
 import { getLoansCollection } from '../../transactions/loans/loans-api';
 import { getPaymentsCollection } from '../../transactions/payments/payments-api';
+import styles from './Dashboard.module.scss';
 
 interface ITransaction {
   amount: number;
@@ -16,11 +20,51 @@ interface ITransaction {
   description: string;
 }
 
+const bgImages = [
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1670953119/What%20I%20Owe%20Dad/wiod-1.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733469/What%20I%20Owe%20Dad/IMG_9536.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733469/What%20I%20Owe%20Dad/IMG_0294.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733447/What%20I%20Owe%20Dad/IMG_9475.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733380/What%20I%20Owe%20Dad/IMG_9664.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733376/What%20I%20Owe%20Dad/IMG_9520.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733344/What%20I%20Owe%20Dad/IMG_0213.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733310/What%20I%20Owe%20Dad/IMG_0219.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733291/What%20I%20Owe%20Dad/IMG_0332.png'
+  },
+  {
+    src: 'https://res.cloudinary.com/kcsommers/image/upload/v1671733080/What%20I%20Owe%20Dad/IMG_1912.png'
+  }
+];
+
 export const DashboardPage = () => {
   const { firestore } = useFirebase();
   const [totalOwed, setTotalOwed] = useState<number>();
   const [loans, setLoans] = useState<ITransaction[]>();
   const [payments, setPayments] = useState<ITransaction[]>();
+  const [currImgIndex, setCurrentImgIndex] = useState(0);
+
+  useInterval(
+    () => setCurrentImgIndex((prevIndex) => (prevIndex + 1) % bgImages.length),
+    5000,
+    true
+  );
 
   useEffect(() => {
     (async () => {
@@ -53,6 +97,7 @@ export const DashboardPage = () => {
   return (
     <Layout>
       <div className='pos-relative h-100vh'>
+        <h1 className={classNames(styles.title, 'z-9')}>What I Owe Dad</h1>
         <div className='pos-absolute pos-fill'>
           <animated.div
             className='pos-absolute pos-fill z-2'
@@ -63,29 +108,27 @@ export const DashboardPage = () => {
             }}
           ></animated.div>
           <ImageCrossfader
-            images={[
-              {
-                src: 'https://res.cloudinary.com/kcsommers/image/upload/v1670953119/What%20I%20Owe%20Dad/wiod-1.png'
-              }
-            ]}
+            images={bgImages}
+            activeImage={bgImages[currImgIndex]}
           />
         </div>
         <div className='h-100 d-flex align-items-center justify-content-center'>
-          <h1
-            className='pos-relative z-2 color-white'
-            style={{ fontSize: '100px' }}
-          >
-            {getDollarString(totalOwed)}
-          </h1>
+          <h2 className={classNames(styles.total_owed, 'pos-relative z-2')}>
+            {typeof totalOwed === 'undefined' ? (
+              <LoadingSpinner size='lg' />
+            ) : (
+              getDollarString(totalOwed)
+            )}
+          </h2>
         </div>
       </div>
-      <section className='p-4'>
+      <section className={styles.tabs_section}>
         <TabsContainer
-          tabNames={['Payments', 'Loans']}
+          tabNames={['Loans', 'Payments']}
           tabContent={[
             <TabContent>
               <Table<ITransaction>
-                data={payments}
+                data={loans}
                 columns={[
                   {
                     display: 'Date',
@@ -106,7 +149,8 @@ export const DashboardPage = () => {
             </TabContent>,
             <TabContent>
               <Table<ITransaction>
-                data={loans}
+                data={payments}
+                emptyMessage='No payments yet!'
                 columns={[
                   {
                     display: 'Date',

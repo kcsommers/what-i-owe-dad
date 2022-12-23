@@ -1,5 +1,6 @@
 div.table_wrap {
   border-radius: 2px;
+  min-height: 250px;
 }
 
 div.table_header_row,
@@ -79,7 +80,7 @@ input.current_page_input {
 }
 
 div.empty_table_wrap {
-  height: 150px;
+  min-height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
