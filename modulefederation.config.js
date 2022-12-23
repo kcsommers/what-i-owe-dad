@@ -1,9 +1,10 @@
+require('dotenv').config();
 const { dependencies } = require('./package.json');
 
 module.exports = {
   name: 'host',
   remotes: {
-    kc_components: 'kc_components@http://localhost:4000/remoteEntry.js'
+    kc_components: process.env.COMPONENTS_PATH
   },
   shared: {
     ...dependencies,
