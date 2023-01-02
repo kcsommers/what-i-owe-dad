@@ -16,7 +16,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strictNullChecks": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./@mf-types/*"]
+    }
   },
   "include": ["src"]
 }

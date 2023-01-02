@@ -1,4 +1,4 @@
-import { emailRegex } from 'kc_components/common/utils/regex';
+import { emailRegex } from 'kc_components/common/utils/regex/email';
 import { Form } from 'kc_components/react/ui/Form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,10 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
 
-  const handleLogin = async (e: MouseEvent | KeyboardEvent, inputs: any[]) => {
+  const handleLogin = async (
+    e: React.MouseEvent | KeyboardEvent,
+    inputs: any[]
+  ) => {
     try {
       await login({
         email: inputs[0].value,

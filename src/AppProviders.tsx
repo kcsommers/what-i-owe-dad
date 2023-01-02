@@ -1,4 +1,4 @@
-import { BaseTheme } from 'kc_components/react/theme';
+import { BaseTheme } from 'kc_components/react/design/theme/base-theme';
 import { AuthProvider } from './context';
 import { FirebaseProvider } from './firebase/firebase.context';
 

@@ -1,15 +1,13 @@
-import { BaseTheme } from 'kc_components/react/theme';
+import 'kc_components/common/design/styles/base-styles';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import 'kc_components/common/global-styles';
+import { AppProviders } from './AppProviders';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
-import { AuthProvider } from './context';
 import './index.css';
 import { DashboardPage } from './pages/dashboard/Dashboard';
 import { LoginPage } from './pages/login/LoginPage';
 import reportWebVitals from './reportWebVitals';
-import { AppProviders } from './AppProviders';
 
 const router = createBrowserRouter([
   {
