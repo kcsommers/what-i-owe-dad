@@ -14,7 +14,7 @@ import { getLoansCollection } from '../../transactions/loans/loans-api';
 import { getPaymentsCollection } from '../../transactions/payments/payments-api';
 import styles from './Dashboard.module.scss';
 
-interface ITransaction {
+interface Transaction {
   amount: number;
   date: number;
   description: string;
@@ -56,8 +56,8 @@ const bgImages = [
 export const DashboardPage = () => {
   const { firestore } = useFirebase();
   const [totalOwed, setTotalOwed] = useState<number>();
-  const [loans, setLoans] = useState<ITransaction[]>();
-  const [payments, setPayments] = useState<ITransaction[]>();
+  const [loans, setLoans] = useState<Transaction[]>();
+  const [payments, setPayments] = useState<Transaction[]>();
   const [currImgIndex, setCurrentImgIndex] = useState(0);
 
   useInterval(
@@ -72,8 +72,8 @@ export const DashboardPage = () => {
         getLoansCollection(firestore),
         getPaymentsCollection(firestore)
       ]);
-      setLoans(loansCollection.docs.map((d) => d.data() as ITransaction));
-      setPayments(paymentsCollection.docs.map((d) => d.data() as ITransaction));
+      setLoans(loansCollection.docs.map((d) => d.data() as Transaction));
+      setPayments(paymentsCollection.docs.map((d) => d.data() as Transaction));
     })();
   }, []);
 
@@ -127,7 +127,7 @@ export const DashboardPage = () => {
           tabNames={['Loans', 'Payments']}
           tabContent={[
             <TabContent>
-              <Table<ITransaction>
+              <Table<Transaction>
                 data={loans}
                 columns={[
                   {
@@ -148,7 +148,7 @@ export const DashboardPage = () => {
               />
             </TabContent>,
             <TabContent>
-              <Table<ITransaction>
+              <Table<Transaction>
                 data={payments}
                 emptyMessage='No payments yet!'
                 columns={[

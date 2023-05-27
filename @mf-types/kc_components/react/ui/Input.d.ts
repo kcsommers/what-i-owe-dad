@@ -9,7 +9,7 @@ export declare type InputProps = {
         text: string;
         for: string;
     };
-    errorMessage: string;
+    errorMessage?: string;
     validator?: (value: string) => string;
     onChange?: (e: React.ChangeEvent) => void;
 };
