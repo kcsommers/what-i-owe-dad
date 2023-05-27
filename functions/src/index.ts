@@ -1,4 +1,4 @@
-export * from './payments/scheduled-payment';
+export * from './payments/create-payment';
 
 // // Listens for new messages added to /messages/:documentId/original and creates an
 // // uppercase version of the message to /messages/:documentId/uppercase
