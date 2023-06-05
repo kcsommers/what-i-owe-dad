@@ -1,9 +1,8 @@
 import { animated } from '@react-spring/web';
 import classNames from 'classnames';
-import { getDateDisplay } from 'kc_components/common/utils/dates/date-utils';
+import { getDateDisplay } from 'kc_components/common/utils/dates/get-date-display';
 import { getDollarString } from 'kc_components/common/utils/display/get-dollar-string';
 import { ImageCrossfader } from 'kc_components/react/ui/ImageCrossfader';
-import { Layout } from 'kc_components/react/ui/Layout';
 import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
 import { useInterval } from 'kc_components/react/utils/hooks/use-interval';
 import { useEffect, useState } from 'react';
@@ -95,7 +94,7 @@ export const DashboardPage = () => {
   }, [loans, payments]);
 
   return (
-    <Layout>
+    <>
       <div className='pos-relative h-100vh'>
         <h1 className={classNames(styles.title, 'z-9')}>What I Owe Dad</h1>
         <div className='pos-absolute pos-fill'>
@@ -172,6 +171,6 @@ export const DashboardPage = () => {
           ]}
         />
       </section>
-    </Layout>
+    </>
   );
 };
