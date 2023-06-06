@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth.context';
 import styles from './LoginPage.module.scss';
@@ -14,6 +14,7 @@ export const LoginPage = () => {
   const [passwordError, setPasswordError] = useState('');
   const [formError, setFormError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loginComplete, setLoginComplete] = useState(false);
 
   const formValid = (): boolean => {
     let isValid = true;
@@ -44,7 +45,7 @@ export const LoginPage = () => {
         email: emailInput,
         password: passwordInput
       });
-      navigate('/');
+      setLoginComplete(true);
     } catch (error: any) {
       // const errorCode = error.code;
       // const errorMessage = error.message;
@@ -52,6 +53,12 @@ export const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (loginComplete) {
+      navigate('/');
+    }
+  }, [loginComplete]);
 
   return (
     <div
