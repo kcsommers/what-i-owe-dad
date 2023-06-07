@@ -17,7 +17,8 @@ module.exports = {
         primary: 'rgb(var(--color-primary) / <alpha-value>)'
       },
       fontFamily: {
-        primary: 'var(--font-primary)'
+        primary: 'var(--font-primary)',
+        secondary: 'var(--font-secondary)'
       },
       fontSize: {
         h1: '5.25rem',

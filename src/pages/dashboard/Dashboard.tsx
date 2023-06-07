@@ -1,17 +1,14 @@
-import { animated } from '@react-spring/web';
 import classNames from 'classnames';
 import { getDateDisplay } from 'kc_components/common/utils/dates/get-date-display';
 import { getDollarString } from 'kc_components/common/utils/display/get-dollar-string';
-import { ImageCrossfader } from 'kc_components/react/ui/ImageCrossfader';
 import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
 import { useInterval } from 'kc_components/react/utils/hooks/use-interval';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import CountUp from 'react-countup';
 import { Table } from '../../components/Table';
-import { TabContent, TabsContainer } from '../../components/TabsContainer';
 import { useFirebase } from '../../firebase';
 import { getLoansCollection } from '../../transactions/loans/loans-api';
 import { getPaymentsCollection } from '../../transactions/payments/payments-api';
-import styles from './Dashboard.module.scss';
 
 interface Transaction {
   amount: number;
@@ -59,6 +56,15 @@ export const DashboardPage = () => {
   const [payments, setPayments] = useState<Transaction[]>();
   const [currImgIndex, setCurrentImgIndex] = useState(0);
 
+  const mostRecentPayment = useMemo(() => {
+    return (payments || []).reduce((mostRecent, curr) => {
+      if (!mostRecent || mostRecent.date < curr.date) {
+        return curr;
+      }
+      return mostRecent;
+    }, null);
+  }, [payments]);
+
   useInterval(
     () => setCurrentImgIndex((prevIndex) => (prevIndex + 1) % bgImages.length),
     5000,
@@ -94,83 +100,150 @@ export const DashboardPage = () => {
   }, [loans, payments]);
 
   return (
-    <>
-      <div className='pos-relative h-100vh'>
-        <h1 className={classNames(styles.title, 'z-9')}>What I Owe Dad</h1>
-        <div className='pos-absolute pos-fill'>
-          <animated.div
-            className='pos-absolute pos-fill z-2'
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at center, rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.05) 100%)',
-              backgroundSize: 'cover'
-            }}
-          ></animated.div>
-          <ImageCrossfader
-            images={bgImages}
-            activeImage={bgImages[currImgIndex]}
-          />
-        </div>
-        <div className='h-100 d-flex align-items-center justify-content-center'>
-          <h2 className={classNames(styles.total_owed, 'pos-relative z-2')}>
-            {typeof totalOwed === 'undefined' ? (
-              <LoadingSpinner size='lg' />
-            ) : (
-              getDollarString(totalOwed)
-            )}
-          </h2>
+    <div className='bg-primary min-h-screen relative'>
+      <div className='px-10 py-20 md:px-20 text-white bg-primary top-0 left-0'>
+        <div>
+          <h1 className='text-2xl font-bold mb-2'>What I Owe Dad</h1>
+          {typeof totalOwed !== 'number' ? (
+            <LoadingSpinner color='secondary' size='lg' />
+          ) : (
+            <>
+              <h2 className='text-6xl md:text-8xl'>
+                $
+                <CountUp
+                  start={0}
+                  end={totalOwed / 100}
+                  separator=','
+                  decimals={2}
+                />
+              </h2>
+              {mostRecentPayment && (
+                <div className='text-lg mt-4'>
+                  Last payment
+                  <p className='text-secondary'>
+                    {getDollarString(mostRecentPayment.amount)} on{' '}
+                    {getDateDisplay(mostRecentPayment.date, 'month dd, yyyy')}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
-      <section className={styles.tabs_section}>
-        <TabsContainer
-          tabNames={['Loans', 'Payments']}
-          tabContent={[
-            <TabContent>
-              <Table<Transaction>
-                data={loans}
-                columns={[
-                  {
-                    display: 'Date',
-                    property: 'date',
-                    transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
-                  },
-                  {
-                    display: 'Amount',
-                    property: 'amount',
-                    transformer: (row) => getDollarString(row.amount)
-                  },
-                  {
-                    display: 'Description',
-                    property: 'description'
-                  }
-                ]}
-              />
-            </TabContent>,
-            <TabContent>
-              <Table<Transaction>
-                data={payments}
-                emptyMessage='No payments yet!'
-                columns={[
-                  {
-                    display: 'Date',
-                    property: 'date',
-                    transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
-                  },
-                  {
-                    display: 'Amount',
-                    property: 'amount',
-                    transformer: (row) => getDollarString(row.amount)
-                  },
-                  {
-                    display: 'Description',
-                    property: 'description'
-                  }
-                ]}
-              />
-            </TabContent>
-          ]}
-        />
-      </section>
-    </>
+
+      <div className='text-white px-10 md:px-20 py-20'>
+        <div className='mb-12'>
+          <p className='mb-2 text-2xl'>Loans</p>
+          <Table<Transaction>
+            data={loans}
+            columns={[
+              {
+                display: 'Date',
+                property: 'date',
+                transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+              },
+              {
+                display: 'Amount',
+                property: 'amount',
+                transformer: (row) => getDollarString(row.amount)
+              },
+              {
+                display: 'Description',
+                property: 'description'
+              }
+            ]}
+          />
+        </div>
+        <div className='mb-8'>
+          <p className='mb-2 text-2xl'>Payments</p>
+          <Table<Transaction>
+            data={payments}
+            columns={[
+              {
+                display: 'Date',
+                property: 'date',
+                transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+              },
+              {
+                display: 'Amount',
+                property: 'amount',
+                transformer: (row) => getDollarString(row.amount)
+              },
+              {
+                display: 'Description',
+                property: 'description'
+              }
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+    // <>
+    //   <div className='relative h-100vh'>
+    //     <ImageCrossfader
+    //       images={bgImages}
+    //       activeImage={bgImages[currImgIndex]}
+    //     />
+    //     <div className='h-100 d-flex align-items-center justify-content-center'>
+    //       <h2 className={classNames(styles.total_owed, 'pos-relative z-2')}>
+    //         {typeof totalOwed === 'undefined' ? (
+    //           <LoadingSpinner size='lg' />
+    //         ) : (
+    //           getDollarString(totalOwed)
+    //         )}
+    //       </h2>
+    //     </div>
+    //   </div>
+    //   <section className={styles.tabs_section}>
+    //     <TabsContainer
+    //       tabNames={['Loans', 'Payments']}
+    //       tabContent={[
+    //         <TabContent>
+    // <Table<Transaction>
+    //   data={loans}
+    //   columns={[
+    //     {
+    //       display: 'Date',
+    //       property: 'date',
+    //       transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+    //     },
+    //     {
+    //       display: 'Amount',
+    //       property: 'amount',
+    //       transformer: (row) => getDollarString(row.amount)
+    //     },
+    //     {
+    //       display: 'Description',
+    //       property: 'description'
+    //     }
+    //   ]}
+    // />
+    //         </TabContent>,
+    //         <TabContent>
+    //           <Table<Transaction>
+    //             data={payments}
+    //             emptyMessage='No payments yet!'
+    //             columns={[
+    //               {
+    //                 display: 'Date',
+    //                 property: 'date',
+    //                 transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
+    //               },
+    //               {
+    //                 display: 'Amount',
+    //                 property: 'amount',
+    //                 transformer: (row) => getDollarString(row.amount)
+    //               },
+    //               {
+    //                 display: 'Description',
+    //                 property: 'description'
+    //               }
+    //             ]}
+    //           />
+    //         </TabContent>
+    //       ]}
+    //     />
+    //   </section>
+    // </>
   );
 };

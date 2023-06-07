@@ -118,34 +118,34 @@ export const Table = <T,>({
 
   if (!data) {
     return (
-      <div className={styles.empty_table_wrap}>
-        <LoadingSpinner />
+      <div className='min-h-[250px] flex items-center justify-center border-2 border-secondary'>
+        <LoadingSpinner size='lg' color='secondary' />
       </div>
     );
   }
   if (!data.length) {
     return (
-      <div className={styles.empty_table_wrap}>
+      <div className='min-h-[250px] flex items-center justify-center border-2 border-secondary'>
         {emptyMessage || 'No data to display'}
       </div>
     );
   }
   return (
-    <div className='box-shadow p-1 bg-white'>
-      <div className={classnames(styles.table_wrap)}>
+    <div className='border-2 border-secondary'>
+      <div className='rounded-sm min-h-[250px]'>
         <div
-          className={classnames(
-            styles.table_header_row,
-            styles.table_row,
-            'pb-1'
-          )}
+          className='flex items-center border-b-2 border-secondary bg-white text-primary'
           style={!!expandableContent ? { paddingLeft: '0px' } : {}}
         >
           {expandableContent && (
             <span className={styles.table_arrow_wrap}></span>
           )}
           {columns.map((column) => (
-            <div key={column.display} style={column.styles || {}}>
+            <div
+              key={column.display}
+              className='flex-1 font-bold p-2'
+              style={column.styles || {}}
+            >
               {column.display}
             </div>
           ))}
@@ -153,12 +153,12 @@ export const Table = <T,>({
         </div>
         {(displayedRows || []).map((row, i) => (
           <div
-            className={styles.table_row_wrap}
             key={JSON.stringify(row)}
+            className='border-b-1 border-secondary'
             onClick={() => toggleRow(i)}
           >
             <div
-              className={classnames(styles.table_row, 'pv-1')}
+              className='flex items-center'
               style={
                 !!expandableContent
                   ? { paddingLeft: '0px', cursor: 'pointer' }
@@ -178,7 +178,7 @@ export const Table = <T,>({
                 </span>
               )}
               {columns.map((column) => (
-                <div key={column.display}>
+                <div key={column.display} className='flex-1 text-lg p-2'>
                   {(column.transformer
                     ? column.transformer(row)
                     : row[column.property]) || '--'}
@@ -207,59 +207,60 @@ export const Table = <T,>({
           </div>
         ))}
       </div>
-      <div className={styles.table_pagination_wrap}>
-        <div className={styles.current_rows_wrap}>
-          <p>{getRowsRange()}</p>
-        </div>
-        <div
-          className={classnames(
-            styles.current_page_wrap,
-            'd-flex align-items-center'
-          )}
-        >
-          <span
-            className={`${currentPage <= 1 ? 'disabled' : ''}`}
-            onClick={() => {
-              setCurrentPage(currentPage - 1);
-            }}
-          >
-            {/* <FontAwesomeIcon icon={faChevronLeft} color='#00788a' /> */}
-          </span>
-          Page
-          <input
-            className={styles.current_page_input}
-            type='text'
-            value={currentPage}
-            onChange={(e) => {
-              if (!e.target.value) {
-                setCurrentPage(0);
-                return;
-              }
-              if (!isNaN(+e.target.value)) {
-                const page =
-                  +e.target.value > totalPages
-                    ? totalPages
-                    : +e.target.value <= 0
-                    ? 1
-                    : Math.round(+e.target.value);
+      <div className='border-t-2 border-secondary'>
+        <div className='p-2 flex justify-between items-center mr-4'>
+          <div className={styles.current_rows_wrap}>
+            <p>{getRowsRange()}</p>
+          </div>
+          <div className='flex items-center'>
+            <span
+              className={`${
+                currentPage <= 1 ? 'disabled' : ''
+              } inline-block cursor-pointer`}
+              onClick={() => {
+                setCurrentPage(currentPage - 1);
+              }}
+            >
+              {/* <FontAwesomeIcon icon={faChevronLeft} color='#00788a' /> */}
+            </span>
+            Page
+            <input
+              className='w-12 border-1 border-secondary bg-transparent outline-none text-center rounded-sm mx-2'
+              type='text'
+              value={currentPage}
+              onChange={(e) => {
+                if (!e.target.value) {
+                  setCurrentPage(1);
+                  return;
+                }
+                if (!isNaN(+e.target.value)) {
+                  const page =
+                    +e.target.value > totalPages
+                      ? totalPages
+                      : +e.target.value <= 0
+                      ? 1
+                      : Math.round(+e.target.value);
 
-                setCurrentPage(page);
-              }
-            }}
-          />
-          of {totalPages}
-          <span
-            className={`${currentPage >= totalPages ? 'disabled' : ''}`}
-            onClick={() => {
-              setCurrentPage(currentPage + 1);
-            }}
-          >
-            {/* <FontAwesomeIcon
+                  setCurrentPage(page);
+                }
+              }}
+            />
+            of {totalPages}
+            <span
+              className={`${
+                currentPage >= totalPages ? 'disabled' : ''
+              } inline-block cursor-pointer`}
+              onClick={() => {
+                setCurrentPage(currentPage + 1);
+              }}
+            >
+              {/* <FontAwesomeIcon
               icon={faChevronRight}
               color='#00788a'
               style={{ marginLeft: '0.5rem' }}
             /> */}
-          </span>
+            </span>
+          </div>
         </div>
       </div>
     </div>

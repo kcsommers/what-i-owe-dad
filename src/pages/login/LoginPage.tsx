@@ -95,7 +95,7 @@ export const LoginPage = () => {
             <input
               type='email'
               id='email'
-              className='block rounded-sm w-full py-1 text-lg'
+              className='block rounded-sm w-full py-1 text-lg outline-none bg-none'
               placeholder='Enter email address'
               onChange={(e: React.ChangeEvent) => {
                 setEmailInput(e.target['value']);
@@ -126,7 +126,7 @@ export const LoginPage = () => {
               type='password'
               id='password'
               placeholder='Enter password'
-              className='px-1 blockrounded-sm w-full py-1 text-lg'
+              className='px-1 blockrounded-sm w-full py-1 text-lg outline-none bg-none'
               onChange={(e: React.ChangeEvent) => {
                 setPasswordInput(e.target['value']);
               }}
