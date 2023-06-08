@@ -1,10 +1,10 @@
-import classNames from 'classnames';
 import { getDateDisplay } from 'kc_components/common/utils/dates/get-date-display';
 import { getDollarString } from 'kc_components/common/utils/display/get-dollar-string';
-import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
 import { useInterval } from 'kc_components/react/utils/hooks/use-interval';
 import { useEffect, useMemo, useState } from 'react';
 import CountUp from 'react-countup';
+import { LoadingSpinner } from '../..//components/LoadingSpinner/LoadingSpinner';
+import { ImageCrossfader } from '../../components/ImageCrossfader/ImageCrossfader';
 import { Table } from '../../components/Table';
 import { useFirebase } from '../../firebase';
 import { getLoansCollection } from '../../transactions/loans/loans-api';
@@ -101,7 +101,21 @@ export const DashboardPage = () => {
 
   return (
     <div className='bg-primary min-h-screen relative'>
-      <div className='px-10 py-20 md:px-20 text-white bg-primary top-0 left-0'>
+      <div className='absolute w-[500px] h-[800px] top-0 right-0 z-10 overflow-hidden rounded-sm'>
+        <ImageCrossfader
+          images={bgImages}
+          activeImage={bgImages[currImgIndex]}
+        />
+        <div
+          className='absolute top-0 right-0 left-0 bottom-0 bg-cover'
+          style={{
+            backgroundImage:
+              'linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.2) 60%)'
+          }}
+        ></div>
+      </div>
+
+      <div className='px-10 py-20 md:px-20 text-white top-0 left-0 z-30 relative'>
         <div>
           <h1 className='text-2xl font-bold mb-2'>What I Owe Dad</h1>
           {typeof totalOwed !== 'number' ? (
@@ -180,10 +194,10 @@ export const DashboardPage = () => {
     </div>
     // <>
     //   <div className='relative h-100vh'>
-    //     <ImageCrossfader
-    //       images={bgImages}
-    //       activeImage={bgImages[currImgIndex]}
-    //     />
+    // <ImageCrossfader
+    //   images={bgImages}
+    //   activeImage={bgImages[currImgIndex]}
+    // />
     //     <div className='h-100 d-flex align-items-center justify-content-center'>
     //       <h2 className={classNames(styles.total_owed, 'pos-relative z-2')}>
     //         {typeof totalOwed === 'undefined' ? (

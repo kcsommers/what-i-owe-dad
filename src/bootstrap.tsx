@@ -6,7 +6,7 @@ import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { DashboardPage } from './pages/dashboard/Dashboard';
 import { LoginPage } from './pages/login/LoginPage';
 import reportWebVitals from './reportWebVitals';
-import './styles/index.scss';
+import './styles/main.scss';
 
 const router = createBrowserRouter([
   {

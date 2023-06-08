@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { useAuth } from '../../context/auth.context';
 import styles from './LoginPage.module.scss';
 

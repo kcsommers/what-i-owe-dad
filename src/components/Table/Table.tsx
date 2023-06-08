@@ -3,8 +3,6 @@
 //   faChevronRight
 // } from '@fortawesome/free-solid-svg-icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classnames from 'classnames';
-import { LoadingSpinner } from 'kc_components/react/ui/LoadingSpinner';
 import {
   cloneElement,
   createRef,
@@ -12,6 +10,7 @@ import {
   useEffect,
   useState
 } from 'react';
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import styles from './Table.module.scss';
 
 export type TableRow<T = any> = T;
