@@ -100,23 +100,9 @@ export const DashboardPage = () => {
   }, [loans, payments]);
 
   return (
-    <div className='bg-primary min-h-screen relative'>
-      <div className='absolute w-[500px] h-[800px] top-0 right-0 z-10 overflow-hidden rounded-sm'>
-        <ImageCrossfader
-          images={bgImages}
-          activeImage={bgImages[currImgIndex]}
-        />
-        <div
-          className='absolute top-0 right-0 left-0 bottom-0 bg-cover'
-          style={{
-            backgroundImage:
-              'linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.2) 60%)'
-          }}
-        ></div>
-      </div>
-
-      <div className='px-10 py-20 md:px-20 text-white top-0 left-0 z-30 relative'>
-        <div>
+    <div className='bg-primary min-h-screen'>
+      <div className='px-10 py-20 md:px-20 text-white h-[450px] top-0 left-0 relative'>
+        <div className='z-30 relative'>
           <h1 className='text-2xl font-bold mb-2'>What I Owe Dad</h1>
           {typeof totalOwed !== 'number' ? (
             <LoadingSpinner color='secondary' size='lg' />
@@ -142,6 +128,19 @@ export const DashboardPage = () => {
               )}
             </>
           )}
+        </div>
+        <div className='absolute max-w-full w-full h-full top-0 right-0 z-10 overflow-hidden rounded-sm'>
+          <ImageCrossfader
+            images={bgImages}
+            activeImage={bgImages[currImgIndex]}
+          />
+          <div
+            className='absolute top-0 right-0 left-0 bottom-0 bg-cover'
+            style={{
+              backgroundImage:
+                'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.3) 60%)'
+            }}
+          ></div>
         </div>
       </div>
 
@@ -192,72 +191,5 @@ export const DashboardPage = () => {
         </div>
       </div>
     </div>
-    // <>
-    //   <div className='relative h-100vh'>
-    // <ImageCrossfader
-    //   images={bgImages}
-    //   activeImage={bgImages[currImgIndex]}
-    // />
-    //     <div className='h-100 d-flex align-items-center justify-content-center'>
-    //       <h2 className={classNames(styles.total_owed, 'pos-relative z-2')}>
-    //         {typeof totalOwed === 'undefined' ? (
-    //           <LoadingSpinner size='lg' />
-    //         ) : (
-    //           getDollarString(totalOwed)
-    //         )}
-    //       </h2>
-    //     </div>
-    //   </div>
-    //   <section className={styles.tabs_section}>
-    //     <TabsContainer
-    //       tabNames={['Loans', 'Payments']}
-    //       tabContent={[
-    //         <TabContent>
-    // <Table<Transaction>
-    //   data={loans}
-    //   columns={[
-    //     {
-    //       display: 'Date',
-    //       property: 'date',
-    //       transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
-    //     },
-    //     {
-    //       display: 'Amount',
-    //       property: 'amount',
-    //       transformer: (row) => getDollarString(row.amount)
-    //     },
-    //     {
-    //       display: 'Description',
-    //       property: 'description'
-    //     }
-    //   ]}
-    // />
-    //         </TabContent>,
-    //         <TabContent>
-    //           <Table<Transaction>
-    //             data={payments}
-    //             emptyMessage='No payments yet!'
-    //             columns={[
-    //               {
-    //                 display: 'Date',
-    //                 property: 'date',
-    //                 transformer: (row) => getDateDisplay(row.date, 'mm/dd/yyyy')
-    //               },
-    //               {
-    //                 display: 'Amount',
-    //                 property: 'amount',
-    //                 transformer: (row) => getDollarString(row.amount)
-    //               },
-    //               {
-    //                 display: 'Description',
-    //                 property: 'description'
-    //               }
-    //             ]}
-    //           />
-    //         </TabContent>
-    //       ]}
-    //     />
-    //   </section>
-    // </>
   );
 };
