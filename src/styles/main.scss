@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 48 162 255;
+    --color-primary-2: 51 208 255;
+    --color-secondary: 255 231 160;
+    --color-secondary-2: 255 245 184;
+    --color-foreground: 8 2 2;
+    --font-primary: DM sans, sans-serif;
+    --font-secondary: Josefin sans, sans-serif;
+    --box-shadow-mat: 0 3px 6px rgba(0, 0, 0, 0.16),
+      0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+}
+
+* {
+  font-family: var(--font-primary);
+}

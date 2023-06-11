@@ -1,0 +1,13 @@
+div.input_wrap {
+  overflow: hidden;
+  > .border_cover {
+    left: -100%;
+    transition: all ease-out 0.3s;
+  }
+
+  & > input:focus {
+    + .border_cover {
+      left: 0%;
+    }
+  }
+}
